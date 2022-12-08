@@ -9,11 +9,14 @@ for (let i = 0; i < 3; i++) {
 
     const data = await request.json();
 
-    const objects = data.objects
+    const objects = data.objects.map(package => package.package)
 
     packages = [...packages, objects]
 }
 
+packages = packages.flat()
+
 await Deno.writeTextFile("./data.txt", JSON.stringify(packages))
+
 
 console.log("Wrote to data.txt")
