@@ -18,5 +18,4 @@ packages = packages.flat()
 
 await Deno.writeTextFile("./data.txt", JSON.stringify(packages))
 
-
 console.log("Wrote to data.txt")
