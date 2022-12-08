@@ -20,4 +20,4 @@ await Deno.writeTextFile("./data.txt", JSON.stringify(packages))
 
 await Deno.writeTextFile("./data.md", packages.map(pkg => `- [${pkg.name}](${pkg.links.npm})`).join("\n"))
 
-console.log("Wrote to data.txt")
+console.log("Wrote to data.txt!")
