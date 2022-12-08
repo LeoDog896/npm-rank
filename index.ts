@@ -9,7 +9,7 @@ for (let i = 0; i < 3; i++) {
 
     const data = await request.json();
 
-    const objects = data.objects.map(package => package.package)
+    const objects = data.objects.map(pkg => pkg.package);
 
     packages = [...packages, objects]
 }
