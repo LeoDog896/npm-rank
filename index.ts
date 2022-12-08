@@ -7,3 +7,5 @@ const request = await fetch(buildURL(0));
 const data = await request.json();
 
 await Deno.writeTextFile("./data.txt", JSON.stringify(data))
+
+console.log("Wrote to data.txt")

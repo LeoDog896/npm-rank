@@ -15,7 +15,10 @@ on:
     branches: ["main"]
 
 permissions:
-  contents: read
+  id-token: "write"
+  contents: "write"
+  packages: "write"
+  pull-requests: "read"
 
 jobs:
   test:
