@@ -32,7 +32,8 @@ Ordered list of top 1000 NPM packages:
 
 ${
     packages.map(pkg => `- [${pkg.name}](${pkg.links.npm})
-    - ${pkg.description}${optionallyFormat(pkg.links.homepage, "homepage")}${optionallyFormat(pkg.links.repository, "repository")}`).join("\n")
+    - ${pkg.description}
+    - v${pkg.version} ${optionallyFormat(pkg.links.homepage, "homepage")}${optionallyFormat(pkg.links.repository, "repository")}`).join("\n")
 }
 `
 
