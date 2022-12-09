@@ -4,7 +4,7 @@ function buildURL(page: number) {
 
 let packages: unknown[] = []
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 39; i++) {
     const request = await fetch(buildURL(i));
 
     const data = await request.json();
@@ -28,7 +28,7 @@ function optionallyFormat(arg: string | undefined, label: string): string {
 
 const mdContent = `# Packages
 
-Ordered list of top 1000 NPM packages:
+Ordered list of top 10000 NPM packages:
 
 ${
     packages.map(pkg => `- [${pkg.name}](${pkg.links.npm})
