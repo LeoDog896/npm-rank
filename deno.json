@@ -1,5 +1,6 @@
 {
-  "tasks": {
-    "run": "deno run -A scripts/index.ts"
-  }
+	"tasks": {
+		"run": "deno run -A scripts/index.ts",
+		"fmt": "deno fmt --options-use-tabs"
+	}
 }

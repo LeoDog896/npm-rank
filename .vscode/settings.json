@@ -1,3 +1,5 @@
 {
-  "deno.enable": true
+	"deno.enable": true,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4
 }
