@@ -18,13 +18,21 @@ packages = packages.flat()
 
 await Deno.writeTextFile("./raw.txt", JSON.stringify(packages))
 
+function optionallyFormat(arg: string | undefined, label: string): string {
+    if (!arg) {
+        return ""
+    }
+
+    return ` ([${label}](${arg}))`;
+}
+
 const mdContent = `# Packages
 
 Ordered list of top 1000 NPM packages:
 
 ${
     packages.map(pkg => `- [${pkg.name}](${pkg.links.npm})
-    - ${pkg.description}`).join("\n")
+    - ${pkg.description}${optionallyFormat(pkg.links.homepage, "homepage")}${optionallyFormat(pkg.links.repository, "repository")}`).join("\n")
 }
 `
 
