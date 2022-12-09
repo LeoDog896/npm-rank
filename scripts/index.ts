@@ -16,7 +16,7 @@ for (let i = 0; i < 3; i++) {
 
 packages = packages.flat()
 
-await Deno.writeTextFile("./data.txt", JSON.stringify(packages))
+await Deno.writeTextFile("./raw.txt", JSON.stringify(packages))
 
 const mdContent = `# Packages
 
@@ -24,6 +24,6 @@ Ordered list of top 1000 NPM packages:
 
 ${packages.map(pkg => `- [${pkg.name}](${pkg.links.npm})`).join("\n")}`
 
-await Deno.writeTextFile("./data.md", mdContent)
+await Deno.writeTextFile("./src/PACKAGES.md", mdContent)
 
 console.log("Wrote data!")
