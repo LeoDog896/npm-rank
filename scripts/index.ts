@@ -4,10 +4,10 @@ import ProgressBar from "https://deno.land/x/progress@v1.3.4/mod.ts";
 const requestAmount = 40;
 let completed = 0;
 
-const progress = new ProgressBar({
-	title: "Downloading Packages",
-	total: requestAmount,
-});
+const progress = Deno.isatty(Deno.stdout.rid) ? new ProgressBar({
+  title: "Downloading Packages",
+  total: requestAmount,
+}) : undefined;
 
 function buildURL(page: number) {
   // we can get a max of 250 at a time, sorting by popularity only, and using an empty search query (by abusing text filters and using a redundant boost-exact:false filter)
@@ -56,7 +56,11 @@ const packageRequests = await Promise.allSettled(
 	Array.from({ length: requestAmount }).map(async (_, i) => {
 		const packages = await getPage(i);
 		completed++;
-		progress.render(completed);
+    if (progress) {
+		  progress.render(completed);
+    } else {
+      console.log(`Completed ${completed} of ${requestAmount} requests.`);
+    }
 		return ({ page: i, packages });
 	}),
 );
