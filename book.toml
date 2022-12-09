@@ -1,2 +1,7 @@
 [book]
 title = "NPM Rank"
+
+[output.html]
+site-url = "/npm-rank"
+git-repository-url = "https://github.com/LeoDog896/npm-rank"
+git-repository-icon = "fa-github"
