@@ -1,4 +1,3 @@
 # Summary
 
-[Intro](./README.md)
-[Packages](./PACKAGES.md)
+[Intro](./README.md) [Packages](./PACKAGES.md)
