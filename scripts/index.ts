@@ -63,7 +63,7 @@ const packageRequests = await Promise.allSettled(
 
 const packages: Package[] = packageRequests.flatMap((req, i) => {
 	if (req.status === "rejected") {
-		console.error(`Failed to fetch page ${i}.`);
+		console.error(`Failed to fetch page ${i}: ${req.reason}.`);
 		Deno.exit(1);
 	}
 	return req.value.packages;
