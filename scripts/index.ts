@@ -21,21 +21,32 @@ const FetchSchema = z.object({
   })),
 });
 
-// objects.package
-let packages: z.infer<typeof FetchSchema>["objects"][number]["package"][] = []
+type Package = z.infer<typeof FetchSchema>["objects"][number]["package"];
 
-for (let i = 0; i < 39; i++) {
-  console.log("Going through page " + i);
-  const request = await fetch(buildURL(i));
+async function getPage(page: number): Promise<Package[]> {
+  console.log("Starting through page " + page);
+  const request = await fetch(buildURL(page));
 
   const data = await request.json() as unknown;
 
   const { objects } = FetchSchema.parse(data);
 
-  const newPackages = objects.map((obj) => obj.package);
-
-  packages = [...packages, ...newPackages];
+  return objects.map((obj) => obj.package);
 }
+
+// 40 pages
+const packageRequests = await Promise.allSettled(Array(40).fill(0).map((_, i) => {
+    return getPage(i).then((packages) => ({ page: i, packages }));
+}))
+
+const packages: Package[] = packageRequests.flatMap((req) => {
+    if (req.status === "fulfilled") {
+        console.log(`Page ${req.value.page} was successful`);
+        return req.value.packages;
+    }
+
+    throw req.reason;
+})
 
 await Deno.writeTextFile("./raw.txt", JSON.stringify(packages));
 
