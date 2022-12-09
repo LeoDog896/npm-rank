@@ -57,5 +57,4 @@ jobs:
           title: "NPM Ranking"
           files: |
             raw.txt
-            src/PACKAGES.md
             LICENSE

@@ -4,4 +4,4 @@ Automated top 1000 npm packages collector using Deno & GitHub actions. Inspired 
 
 Check out the packages (mdBook): https://leodog896.github.io/npm-rank/PACKAGES.html
 
-The raw data is available in [releases](https://github.com/LeoDog896/npm-rank/releases) as a [raw file](https://github.com/LeoDog896/npm-rank/releases/download/latest/raw.txt) or as a [markdown file](https://github.com/LeoDog896/npm-rank/releases/download/latest/PACKAGES.md).
+The raw data is available in [releases](https://github.com/LeoDog896/npm-rank/releases) as [json](https://github.com/LeoDog896/npm-rank/releases/download/latest/raw.txt).

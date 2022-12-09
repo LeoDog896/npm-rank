@@ -1,5 +1,5 @@
 function buildURL(page: number) {
-    return `https://registry.npmjs.com/-/v1/search?size=250&from=${page * 250}&popularity=1.0&quality=0.0&maintenance=0.0&text=boost-exact:false`;
+    return `https://registry.npmjs.com/-/v1/search?size=250&popularity=1.0&quality=0.0&maintenance=0.0&text=boost-exact:false&from=${page * 250}`;
 }
 
 let packages: unknown[] = []
@@ -22,7 +22,11 @@ const mdContent = `# Packages
 
 Ordered list of top 1000 NPM packages:
 
-${packages.map(pkg => `- [${pkg.name}](${pkg.links.npm})`).join("\n")}`
+${
+    packages.map(pkg => `- [${pkg.name}](${pkg.links.npm})
+    - ${pkg.description}`).join("\n")
+}
+`
 
 await Deno.writeTextFile("./src/PACKAGES.md", mdContent)
 
