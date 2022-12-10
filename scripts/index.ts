@@ -4,37 +4,39 @@ import ProgressBar from "https://deno.land/x/progress@v1.3.4/mod.ts";
 const requestAmount = 40;
 let completed = 0;
 
-const progress = Deno.isatty(Deno.stdout.rid) ? new ProgressBar({
-  title: "Downloading Packages",
-  total: requestAmount,
-}) : undefined;
+const progress = Deno.isatty(Deno.stdout.rid)
+	? new ProgressBar({
+		title: "Package progress:",
+		total: requestAmount,
+	})
+	: undefined;
 
 function buildURL(page: number) {
-  // we can get a max of 250 at a time, sorting by popularity only, and using an empty search query (by abusing text filters and using a redundant boost-exact:false filter)
+	// we can get a max of 250 at a time, sorting by popularity only, and using an empty search query (by abusing text filters and using a redundant boost-exact:false filter)
 	return `https://registry.npmjs.com/-/v1/search?size=250&popularity=1.0&quality=0.0&maintenance=0.0&text=boost-exact:false&from=${
 		page * 250
 	}`;
 }
 
 const PackageSchema = z.object({
-  name: z.string(),
-  version: z.string(),
-  description: z.string().optional(),
-  keywords: z.array(z.string()).optional(),
-  publisher: z.object({
-    username: z.string(),
-    email: z.string(),
-  }),
-  maintainers: z.array(z.object({
-    username: z.string(),
-    email: z.string(),
-  })).optional(),
-  links: z.object({
-    npm: z.string(),
-    homepage: z.string().optional(),
-    repository: z.string().optional(),
-  }),
-})
+	name: z.string(),
+	version: z.string(),
+	description: z.string().optional(),
+	keywords: z.array(z.string()).optional(),
+	publisher: z.object({
+		username: z.string(),
+		email: z.string(),
+	}),
+	maintainers: z.array(z.object({
+		username: z.string(),
+		email: z.string(),
+	})).optional(),
+	links: z.object({
+		npm: z.string(),
+		homepage: z.string().optional(),
+		repository: z.string().optional(),
+	}),
+});
 
 const FetchSchema = z.object({
 	objects: z.array(z.object({
@@ -56,11 +58,11 @@ const packageRequests = await Promise.allSettled(
 	Array.from({ length: requestAmount }).map(async (_, i) => {
 		const packages = await getPage(i);
 		completed++;
-    if (progress) {
-		  progress.render(completed);
-    } else {
-      console.log(`Completed ${completed} of ${requestAmount} requests.`);
-    }
+		if (progress) {
+			progress.render(completed);
+		} else {
+			console.log(`Completed ${completed} of ${requestAmount} requests.`);
+		}
 		return ({ page: i, packages });
 	}),
 );
@@ -88,7 +90,9 @@ const mdContent = `# Packages
 Ordered list of top 10000 NPM packages:
 
 ${
-	packages.map(({ name, links: { npm, homepage, repository }, description, version }) =>
+	packages.map((
+		{ name, links: { npm, homepage, repository }, description, version },
+	) =>
 		`- [${name}](${npm})
     - ${description}
     - v${version} ${optionallyFormat(homepage, "homepage")}${
