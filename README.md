@@ -1,6 +1,6 @@
 # npm-rank
 
-Automated top 1000 npm packages collector using Deno & GitHub actions. Inspired
+Automated top 10000 npm packages collector using Deno & GitHub actions. Inspired
 by
 [anvaka's npm rank gist](https://gist.github.com/anvaka/8e8fa57c7ee1350e3491).
 
