@@ -92,8 +92,9 @@ Ordered list of top 10000 NPM packages:
 ${
 	packages.map((
 		{ name, links: { npm, homepage, repository }, description, version },
+		i
 	) =>
-		`- [${name}](${npm})
+		`${i + 1}. [${name}](${npm})
     - ${description}
     - v${version} ${optionallyFormat(homepage, "homepage")}${
 			optionallyFormat(repository, "repository")
