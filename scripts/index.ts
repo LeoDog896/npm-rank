@@ -4,6 +4,16 @@ import ProgressBar from "https://deno.land/x/progress@v1.3.4/mod.ts";
 const requestAmount = 40;
 let completed = 0;
 
+// https://stackoverflow.com/a/6234804/7589775
+function escapeHTML(unsafe: string) {
+	return unsafe
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
 const progress = Deno.isatty(Deno.stdout.rid)
 	? new ProgressBar({
 		title: "Package progress:",
@@ -115,7 +125,7 @@ ${
 		i,
 	) =>
 		`${i + 1}. [${name}](${npm})
-    - ${description}
+    - ${escapeHTML(description ?? "")}
     - v${version} ${optionallyFormat(homepage, "homepage")}${
 			optionallyFormat(repository, "repository")
 		}`
