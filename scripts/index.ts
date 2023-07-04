@@ -24,7 +24,7 @@ const progress = Deno.isatty(Deno.stdout.rid)
 function buildURL(index: number, max = 250) {
 	// we can get a max of 250 at a time, sorting by popularity only, and using an empty search query (by abusing text filters and using a redundant boost-exact:false filter)
 	return `https://registry.npmjs.com/-/v1/search?size=${max}&popularity=1.0&quality=0.0&maintenance=0.0&text=boost-exact:false&from=${
-		index * 250
+		index
 	}`;
 }
 
