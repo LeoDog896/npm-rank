@@ -11,11 +11,15 @@ const progress = Deno.isatty(Deno.stdout.rid)
 	})
 	: undefined;
 
-function buildURL(page: number) {
+function buildURL(index: number, max = 250) {
 	// we can get a max of 250 at a time, sorting by popularity only, and using an empty search query (by abusing text filters and using a redundant boost-exact:false filter)
-	return `https://registry.npmjs.com/-/v1/search?size=250&popularity=1.0&quality=0.0&maintenance=0.0&text=boost-exact:false&from=${
-		page * 250
+	return `https://registry.npmjs.com/-/v1/search?size=${max}&popularity=1.0&quality=0.0&maintenance=0.0&text=boost-exact:false&from=${
+		index * 250
 	}`;
+}
+
+function pageURL(page: number) {
+	return buildURL(page * 250);
 }
 
 const PackageSchema = z.object({
@@ -47,7 +51,7 @@ const FetchSchema = z.object({
 type Package = z.infer<typeof PackageSchema>;
 
 async function getPage(page: number): Promise<Package[]> {
-	const request = await fetch(buildURL(page));
+	const request = await fetch(pageURL(page));
 
 	const { objects } = FetchSchema.parse(await request.json());
 
@@ -75,6 +79,22 @@ const packages: Package[] = packageRequests.flatMap((req, i) => {
 	return req.value.packages;
 });
 
+if (packages.length !== 10000) {
+	const remaining = 10000 - packages.length;
+
+	const fetchURL = buildURL(remaining, 3);
+
+	console.log(`Fetching remaining ${remaining} packages from ${fetchURL}...`);
+
+	const request = await fetch(fetchURL);
+
+	const { objects } = FetchSchema.parse(await request.json());
+
+	packages.push(...objects.map((obj) => obj.package));
+
+	console.log(`Fetched an extra ${objects.length} packages.`);
+}
+
 await Deno.writeTextFile("./raw.txt", JSON.stringify(packages));
 
 function optionallyFormat(arg: string | undefined, label: string): string {
@@ -92,7 +112,7 @@ Ordered list of top 10000 NPM packages:
 ${
 	packages.map((
 		{ name, links: { npm, homepage, repository }, description, version },
-		i
+		i,
 	) =>
 		`${i + 1}. [${name}](${npm})
     - ${description}
@@ -105,4 +125,11 @@ ${
 
 await Deno.writeTextFile("./src/PACKAGES.md", mdContent);
 
-console.log("Wrote data!");
+console.assert(
+	packages.length === 10000,
+	"Expected 10000 packages. Did the remainder function fail?",
+);
+
+console.log(
+	`Wrote ${packages.length} packages to ./raw.txt and ./src/PACKAGES.md.`,
+);
