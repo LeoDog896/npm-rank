@@ -90,11 +90,9 @@ const packages: Package[] = packageRequests.flatMap((req, i) => {
 });
 
 if (packages.length !== 10000) {
-	const remaining = 10000 - packages.length;
+	const fetchURL = buildURL(packages.length, 3);
 
-	const fetchURL = buildURL(remaining, 3);
-
-	console.log(`Fetching remaining ${remaining} packages from ${fetchURL}...`);
+	console.log(`Fetching remaining ${10000 - packages.length} packages from ${fetchURL}...`);
 
 	const request = await fetch(fetchURL);
 
