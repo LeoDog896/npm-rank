@@ -9,4 +9,4 @@ https://leodog896.github.io/npm-rank/PACKAGES.html
 
 The raw data is available in
 [releases](https://github.com/LeoDog896/npm-rank/releases) as
-[json](https://github.com/LeoDog896/npm-rank/releases/download/latest/raw.txt).
+[json](https://github.com/LeoDog896/npm-rank/releases/download/latest/raw.json).
