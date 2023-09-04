@@ -139,5 +139,5 @@ console.assert(
 );
 
 console.log(
-	`Wrote ${packages.length} packages to ./raw.txt and ./src/PACKAGES.md.`,
+	`Wrote ${packages.length} packages to ./raw.json and ./src/PACKAGES.md.`,
 );
