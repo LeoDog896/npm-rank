@@ -56,5 +56,5 @@ jobs:
           prerelease: true
           title: "NPM Ranking"
           files: |
-            raw.txt
+            raw.json
             LICENSE

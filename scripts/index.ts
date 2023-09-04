@@ -103,7 +103,7 @@ if (packages.length !== 10000) {
 	console.log(`Fetched an extra ${objects.length} packages.`);
 }
 
-await Deno.writeTextFile("./raw.txt", JSON.stringify(packages));
+await Deno.writeTextFile("./raw.json", JSON.stringify(packages));
 
 function optionallyFormat(arg: string | undefined, label: string): string {
 	if (!arg) {
@@ -139,5 +139,5 @@ console.assert(
 );
 
 console.log(
-	`Wrote ${packages.length} packages to ./raw.txt and ./src/PACKAGES.md.`,
+	`Wrote ${packages.length} packages to ./raw.json and ./src/PACKAGES.md.`,
 );
