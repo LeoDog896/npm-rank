@@ -57,4 +57,5 @@ jobs:
           title: "NPM Ranking"
           files: |
             raw.json
+            raw.json.hash
             LICENSE

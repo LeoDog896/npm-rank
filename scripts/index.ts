@@ -1,5 +1,6 @@
 import { z } from "https://deno.land/x/zod@v3.20.0/mod.ts";
 import ProgressBar from "https://deno.land/x/progress@v1.3.4/mod.ts";
+import { encodeHex } from "https://deno.land/std@0.207.0/encoding/hex.ts";
 
 const requestAmount = 40;
 let completed = 0;
@@ -90,9 +91,11 @@ const packages: Package[] = packageRequests.flatMap((req, i) => {
 });
 
 if (packages.length !== 10000) {
-	const fetchURL = buildURL(packages.length, 3);
+	const remaining = 10000 - packages.length;
 
-	console.log(`Fetching remaining ${10000 - packages.length} packages from ${fetchURL}...`);
+	const fetchURL = buildURL(packages.length, remaining);
+
+	console.log(`Fetching remaining ${remaining} packages from ${fetchURL}...`);
 
 	const request = await fetch(fetchURL);
 
@@ -103,7 +106,9 @@ if (packages.length !== 10000) {
 	console.log(`Fetched an extra ${objects.length} packages.`);
 }
 
-await Deno.writeTextFile("./raw.json", JSON.stringify(packages));
+const packagesString = new TextEncoder().encode(JSON.stringify(packages))
+await Deno.writeFile("./raw.json", packagesString);
+await Deno.writeTextFile("./raw.json.hash", encodeHex(await crypto.subtle.digest("SHA-256", packagesString)));
 
 function optionallyFormat(arg: string | undefined, label: string): string {
 	if (!arg) {
