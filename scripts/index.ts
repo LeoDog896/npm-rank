@@ -23,6 +23,10 @@ const progress = Deno.isatty(Deno.stdout.rid)
 	: undefined;
 
 function buildURL(index: number, max = 250) {
+	if (max > 250) {
+		throw new Error("Max > 250 - the registry can't handle more than this.");
+	}
+
 	// we can get a max of 250 at a time, sorting by popularity only, and using an empty search query (by abusing text filters and using a redundant boost-exact:false filter)
 	return `https://registry.npmjs.com/-/v1/search?size=${max}&popularity=1.0&quality=0.0&maintenance=0.0&text=boost-exact:false&from=${
 		index
@@ -33,7 +37,7 @@ function pageURL(page: number) {
 	return buildURL(page * 250);
 }
 
-const PackageSchema = z.object({
+const packageSchema = z.object({
 	name: z.string(),
 	version: z.string(),
 	description: z.string().optional(),
@@ -53,18 +57,18 @@ const PackageSchema = z.object({
 	}),
 });
 
-const FetchSchema = z.object({
+const fetchSchema = z.object({
 	objects: z.array(z.object({
-		package: PackageSchema,
+		package: packageSchema,
 	})),
 });
 
-type Package = z.infer<typeof PackageSchema>;
+type Package = z.infer<typeof packageSchema>;
 
 async function getPage(page: number): Promise<Package[]> {
 	const request = await fetch(pageURL(page));
 
-	const { objects } = FetchSchema.parse(await request.json());
+	const { objects } = fetchSchema.parse(await request.json());
 
 	return objects.map((obj) => obj.package);
 }
@@ -99,7 +103,7 @@ if (packages.length !== 10000) {
 
 	const request = await fetch(fetchURL);
 
-	const { objects } = FetchSchema.parse(await request.json());
+	const { objects } = fetchSchema.parse(await request.json());
 
 	packages.push(...objects.map((obj) => obj.package));
 
@@ -145,4 +149,5 @@ console.assert(
 
 console.log(
 	`Wrote ${packages.length} packages to ./raw.json and ./src/PACKAGES.md.`,
+	`with ${new Set(packages.map(pkg => pkg.name)).size} unique packages.`
 );
